@@ -32,6 +32,7 @@ makeCacheMatrix <- function(ip_matrix = matrix()) {
   ##simply returns the value in cacher
   
   list(set=set,get=get,set_inverse=set_inverse,get_inverse=get_inverse)
+  ##'Publishes' the functions available inside makeCacheMatrix
   
 }
 
@@ -46,7 +47,8 @@ cacheSolve <- function(x, ...) {
   if(!is.null(cacher)){
     message("getting cached data")
     return(cacher)
-  ##If cacher is not NULL, print message and return cacher
+  ##If cacher is not NULL (ie an inverse matrix is inside), 
+  ##print message and return cacher
   }
   
   data<-x$get()
@@ -56,9 +58,25 @@ cacheSolve <- function(x, ...) {
   ##Otherwise get the input_matrix, solve the inverse and put it in cacher.  
 }  
 
+##To show that the functions work as anticipated, this function, 
+##test_cache_solve(), runs a script to create an object, b, using 
+##makeCacheMatrix.  It then prints cacheSolve(b) (cacher is NULL) and utilises
+##the 'if' statement in the cacheSolve function.  It prints cacheSolve(b) a
+##second time, this time using the second branch - cacher contains the inverse
+##matrix this time and we see the 'getting cached data' meassage.
+
+##> test_cache_solve()
+##[,1] [,2]
+##[1,]   -2  1.5
+##[2,]    1 -0.5
+##getting cached data
+##[,1] [,2]
+##[1,]   -2  1.5
+##[2,]    1 -0.5
+
 test_cache_solve<-function(){
   b<-makeCacheMatrix(matrix(1:4,2,2))
   print(cacheSolve(b))
   print(cacheSolve(b))
-}
+  }
 
